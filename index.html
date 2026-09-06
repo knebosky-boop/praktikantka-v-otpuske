@@ -30,9 +30,13 @@
 <h1>🏖 Практикантка в отпуске</h1>
 <div class="sub">Посвящается Андрею — автору Практиканта и MCP Оболонь. От благодарных пользователей, у которых всё работает. Почти.</div>
 <canvas id="c" width="900" height="560"></canvas>
-<div class="panel" style="margin-bottom:0">
-  <button id="share" class="share">🔗 Скопировать ссылку для Андрея</button>
-  <button id="tg" class="tg">✈️ Отправить Андрею в Telegram</button>
+<div class="panel" style="margin-bottom:0;flex-direction:column;gap:8px">
+  <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center">
+    <button id="share" class="share">🔗 Скопировать ссылку для Андрея</button>
+    <button id="tg" class="tg">✈️ Отправить Андрею в Telegram</button>
+  </div>
+  <input id="linkbox" readonly value="https://knebosky-boop.github.io/praktikantka-v-otpuske/" onclick="this.select()" style="width:min(520px,90vw);padding:8px 10px;border-radius:8px;border:1px solid rgba(255,255,255,.25);background:#071a2e;color:#9fe0a3;font:13px ui-monospace,Menlo,monospace;text-align:center">
+  <div style="font-size:12px;opacity:.7">Или просто выделите ссылку выше, скопируйте и вставьте Андрею в любой чат.</div>
 </div>
 <div class="panel">
   <label>on_date <input id="time" type="range" min="0" max="1" step="0.001" value="0.35"></label>
@@ -131,8 +135,13 @@ document.getElementById('share').onclick=async()=>{
   }catch(e){prompt('Скопируйте ссылку вручную:',URL_);log('share_link()','err','→ {ok:false, error_code:"cancelled"}');}
 };
 document.getElementById('tg').onclick=()=>{
-  window.open('https://t.me/share/url?url='+encodeURIComponent(URL_)+'&text='+encodeURIComponent('Андрей, это тебе 🏖 Практикантка в отпуске. Силикон — это не баг, это фича.'),'_blank');
-  log('telegram.share()','','→ окно Telegram открыто');
+  const text='Андрей, это тебе 🏖 Практикантка в отпуске. Силикон — это не баг, это фича.';
+  const web='https://t.me/share/url?url='+encodeURIComponent(URL_)+'&text='+encodeURIComponent(text);
+  const app='tg://msg_url?url='+encodeURIComponent(URL_)+'&text='+encodeURIComponent(text);
+  let left=false; const onHide=()=>{left=true;}; document.addEventListener('visibilitychange',onHide);
+  location.href=app;
+  setTimeout(()=>{document.removeEventListener('visibilitychange',onHide); if(!left&&!document.hidden) window.open(web,'_blank');},1200);
+  log('telegram.share()','','→ пробуем приложение Telegram, затем веб');
 };
 
 // ---------- утилиты ----------
