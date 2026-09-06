@@ -30,6 +30,10 @@
 <h1>🏖 Практикантка в отпуске</h1>
 <div class="sub">Посвящается Андрею — автору Практиканта и MCP Оболонь. От благодарных пользователей, у которых всё работает. Почти.</div>
 <canvas id="c" width="900" height="560"></canvas>
+<div class="panel" style="margin-bottom:0">
+  <button id="share" class="share">🔗 Скопировать ссылку для Андрея</button>
+  <button id="tg" class="tg">✈️ Отправить Андрею в Telegram</button>
+</div>
 <div class="panel">
   <label>on_date <input id="time" type="range" min="0" max="1" step="0.001" value="0.35"></label>
   <label>verbosity силикона <input id="sil" type="range" min="0.6" max="2.2" step="0.01" value="1.3"></label>
@@ -45,10 +49,6 @@
   <button id="reset" class="gray">↺ рестарт Оболони</button>
 </div>
 <div id="log"></div>
-<div class="panel">
-  <button id="share" class="share">🔗 Скопировать ссылку</button>
-  <button id="tg" class="tg">✈️ Отправить в Telegram</button>
-</div>
 <div class="foot">Клик по даме — <code>legal_calc</code> упругости. Солнце жарит по-настоящему: следи за шкалой загара и мажь кремом, иначе получишь <code>{ok:false}</code>. Андрей, всё остальное работает. Честно.</div>
 
 <script>
@@ -122,13 +122,13 @@ c.addEventListener('click',ev=>{
 });
 
 // поделиться
-const URL_=location.href.split('#')[0];
+const URL_='https://knebosky-boop.github.io/praktikantka-v-otpuske/';
 const SHARE_TEXT='Андрей, это тебе. Практикантка в отпуске: '+URL_;
 document.getElementById('share').onclick=async()=>{
   try{ if(navigator.share){await navigator.share({title:'Практикантка в отпуске',text:'Андрей, это тебе.',url:URL_});}
-       else{await navigator.clipboard.writeText(URL_);say('Ссылка скопирована. Отправляй Андрею.');}
+       else{await navigator.clipboard.writeText(URL_);say('Ссылка скопирована. Отправляй Андрею.');alert('Ссылка скопирована:\n'+URL_);}
        log('share_link()','','→ {ok:true, url:"'+URL_+'"}');
-  }catch(e){log('share_link()','err','→ {ok:false, error_code:"cancelled"}');}
+  }catch(e){prompt('Скопируйте ссылку вручную:',URL_);log('share_link()','err','→ {ok:false, error_code:"cancelled"}');}
 };
 document.getElementById('tg').onclick=()=>{
   window.open('https://t.me/share/url?url='+encodeURIComponent(URL_)+'&text='+encodeURIComponent('Андрей, это тебе 🏖 Практикантка в отпуске. Силикон — это не баг, это фича.'),'_blank');
